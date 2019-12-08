@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './table.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Excel from './Excel';
 import TextAreaContent from './TextAreaContent';
@@ -32,7 +33,6 @@ class App extends React.Component {
       return (
         <div className="App">
             <Excel defaultHeaders={this.state.headers} defaultData={this.state.data} />
-            <TextAreaContent />
         </div>
       );
   }

@@ -138,12 +138,15 @@ class Excel extends React.Component {
         var search = this.state.search;
 
         return(
-            <div className="table">
-                <button type="button" onClick={this.onSearch}>search</button>
-                <a href="data.json" onClick={this.onDownload}>download</a>
-                <table>
-                    <caption>Table</caption>
-                    <thead>
+            <div className="container">
+                <h1 className="mt-3">Excel Table</h1>
+                <div className="btn-toolbar justify-content-between">
+                    <button type="button" onClick={this.onSearch} className="btn btn-primary">search</button>
+                    <a href="data.json" onClick={this.onDownload} className="btn btn-secondary">download</a>
+                </div>
+                <table className="table table-striped">
+                    <caption className="sr-only">Table</caption>
+                    <thead className="thead-dark">
                         <tr>
                             {
                                 this.state.headers.map((currentValue,idx)=>{
@@ -155,43 +158,41 @@ class Excel extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                        <tr>
+                            {
+                                this.state.headers.map((currentValue,rowidx)=>{
+                                    var content = search ? <td key={rowidx + 10}><input type="text" onChange={this.onFilter} className="form-control" /></td>: null;
+                                    return(
+                                        content
+                                    )
+                                },this)
+                            }
+                        </tr>
                         {
-                            this.state.headers.map((currentValue,rowidx)=>{
-                                var content = search ? <td key={rowidx + 10}><input type="text" onChange={this.onFilter}/></td>: null;
+                            this.state.data.map((currentValue,rowidx)=>{
                                 return(
-                                    content
+                                    <tr key={rowidx}>
+                                        {currentValue.map((currentValue,idx)=>{
+                                            var content = this.state.edit && this.state.edit.row === rowidx && this.state.edit.cell === idx ?
+                                            <form action="" onSubmit={this.onSubmit}>
+                                                <input type="text" defaultValue={currentValue}/>
+                                            </form> :
+                                            currentValue;
+                                            return(
+                                                <td key={idx} data-row={rowidx} onDoubleClick={this.onTyping}>
+                                                    {content}
+                                                </td>
+                                            )
+                                        },this)}
+                                    </tr>
                                 )
-                            },this)
+                            })
                         }
-                    </tr>
-                    {
-                        this.state.data.map((currentValue,rowidx)=>{
-                            return(
-                                <tr key={rowidx}>
-                                    {currentValue.map((currentValue,idx)=>{
-                                        var content = this.state.edit && this.state.edit.row === rowidx && this.state.edit.cell === idx ?
-                                        <form action="" onSubmit={this.onSubmit}>
-                                            <input type="text" defaultValue={currentValue}/>
-                                        </form> :
-                                        currentValue;
-                                        return(
-                                            <td key={idx} data-row={rowidx} onDoubleClick={this.onTyping}>
-                                                {content}
-                                            </td>
-                                        )
-                                    },this)}
-                                </tr>
-                            )
-                        })
-                    }
-                    </tbody>
-                </table>
+                     </tbody>
+                 </table>
             </div>
         )
     }
 }
-
-
 
 export default Excel;
